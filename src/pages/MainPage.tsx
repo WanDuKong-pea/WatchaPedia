@@ -1,9 +1,11 @@
 import React from 'react';
+import Header from '../components/Header';
+
 
 const MainPage: React.FC = () => {
   return (
     <div>
-      <h1>메인 페이지</h1>
+      <Header />
     </div>
   );
 }
