@@ -4,10 +4,10 @@ import {AiOutlineSearch} from 'react-icons/ai'
 
 //z-index => 레이어의 순서를 정해주는 속성. 높을수록 위에 쌓임
 const Base = styled.header`
+    background: rgb(255, 255, 255);
     position: fixed;
     top: 0;
     left: 0;
-    backgorund: rgb(255,255,255);
     text-align: center;
     box-shadow: rgb(0 0 0 / 0%) 0px 1px 0px 0px;
     width: 100%;
