@@ -8,17 +8,30 @@ import NowPlayingSection from '../features/movie/nowPlaying';
 import PopularMovieSection from '../features/movie/popular';
 import TopRateMovieSection from '../features/movie/topRate';
 import UpcomingMovieSection from '../features/movie/upcoming';
+import styled from "@emotion/styled"
 
+const Main = styled.main`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+const Container = styled.div`
+  margin-top: 62px;
+  padding: 24px 0;
+`;
 
 const MainPage: React.FC = () => (
   <>
-    <Header />
-    <LatestMovieSection />
-    <NowPlayingSection />
-    <PopularMovieSection />
-    <TopRateMovieSection />
-    <UpcomingMovieSection />
-    <Footer />
+    <Main>
+      <Container>
+        <Header />
+        <LatestMovieSection />
+        <NowPlayingSection />
+        <PopularMovieSection />
+        <TopRateMovieSection />
+        <UpcomingMovieSection />
+        <Footer />
+      </Container>
+    </Main>
   </>
 )
 
