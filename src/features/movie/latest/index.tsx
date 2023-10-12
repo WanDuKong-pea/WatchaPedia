@@ -5,7 +5,7 @@ import useLatestMovies from './useLatestMovie';
 import Card from '../../../components/Card';
 
 const Base = styled.div`
-    margin-bottom: 42px;
+    margin-bottom: 62px;
 `;
 
 const Title = styled.h4`
