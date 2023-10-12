@@ -9,7 +9,7 @@ export const popularApi = () => axiosInstance.get("/movie/popular");
 //top rated 상영작
 export const topRatedApi = () => axiosInstance.get("/movie/top_rated");
 //개봉 예정작
-export const upComingApi = () => axiosInstance.get("/movie/upcoming");
+export const upcomingApi = () => axiosInstance.get("/movie/upcoming");
 //영화 상세정보
 export const detailApi = (movieId: string) => axiosInstance.get(`/movie/${movieId}`);
 //추천 영화(비슷한)
