@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import {AiOutlineSearch} from 'react-icons/ai'
+import useMovieSearch from '../features/movie/useMovieSearch';
 
 //z-index => 레이어의 순서를 정해주는 속성. 높을수록 위에 쌓임
 const Base = styled.header`
@@ -24,12 +25,12 @@ const MenuListWrapper = styled.div``;
 
 //overflow: hidden = 자식요소가 부모요소의 영역을 벗어나는 경우, 
     //부모요소의 영역을 벗어난 자식요소를 숨김
+    //검색 목록을 영역 밖에 띄우는 것에 있어서 오류 발생하여 삭제함
 const MenuList = styled.ul`
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    overflow: hidden;
 `;
 
 //flex-shrink CSS 속성은 Flexbox 레이아웃에서 사용되며, 
@@ -66,7 +67,7 @@ const MenuButton = styled.button<{active?: boolean}>`
 //postion: relative; => 요소를 일반적인 문서 흐름에 따라 배치
 //align-items: center; => 요소를 수직축에서 가운데로 정렬
 const SearchMenu = styled.li`
-    width: 100%px;
+    width: 100%;
     display: flex;
     align-items: center;
     height: 62px;
@@ -74,9 +75,10 @@ const SearchMenu = styled.li`
     margin: 0 0 0 auto;
     position: relative;
 `;
-
-const Link = styled.a`
+//Link 컴포넌트 CSS 수정(기본 파란색 => 검은색)
+const Link = styled.a` 
     text-decoration: none;
+    color: black;
 `;
 
 const TextLogo = styled.h1`
@@ -157,10 +159,52 @@ const SignUp = styled.button`
     margin: 15px 0;
 `;
 
+const SearchResultWrapper = styled.div` 
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 999;
+    background: #fff;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.1);
+    max-height: 480px;
+    overflow-y: scroll;
+`;
+
+const SearchResultList = styled.ul`
+    list-style: none;
+    margin: 0;
+    padding: 0;
+`;
+
+const SearchResultListItem = styled.li`
+    padding: 4px 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+    width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &:hover{
+        background: #eee;
+    }    
+`;
+
 const Header: React.FC = () => {
-    const handleKeyword = () => {
-        //검색키워드를 set하는 함수
+    //검색 키워드를 저장하는 state
+    const [searchKeyword, setSearchKeyword] = useState<string>('');
+    
+    //검색키워드를 set하는 함수
+    const handleKeyword = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setSearchKeyword(e.target.value);
     }
+
+    //검색키워드가 변경될때마다 다시 렌더링되어 검색결과를 가져옴
+    const { data: searchResult } = useMovieSearch(searchKeyword);
 
     return (
         <Base>
@@ -196,6 +240,17 @@ const Header: React.FC = () => {
                                     </SearchForm>
                                 </SearchFormWrapper>
                             </SearchContiner>
+                            <SearchResultWrapper>
+                                <SearchResultList>
+                                    {
+                                        searchResult?.data.results.map(item => (
+                                            <Link key={item.id} href={`/movie/${item.id}`}>
+                                                <SearchResultListItem>{item.title}</SearchResultListItem>
+                                            </Link>
+                                        ))
+                                    }
+                                </SearchResultList>    
+                            </SearchResultWrapper>
                         </SearchMenu>
                         <Menu>
                             <SignIn>로그인</SignIn>
