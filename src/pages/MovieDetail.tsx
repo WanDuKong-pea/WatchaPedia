@@ -11,6 +11,8 @@ import useMovieDetail from '../features/movie/useMovieDetail';
 
 import Header from "../components/Header"
 import Footer from "../components/Footer"
+import DefaultInfo from '../features/movie/detail/DefaultInfo';
+import Similar from '../features/movie/detail/Similar';
 
 
 
@@ -287,8 +289,14 @@ const MovieDetail: React.FC = () => {
             </TopInfo>
             <BottomInfo>
               <ContentSectionContainer>
-                {/* <DefaultInfo />*/}
-                {/*<Similar /> */}
+                <DefaultInfo 
+                 title={data.data.title} 
+                 year={year} 
+                 genres={genres} 
+                 runtime={data.data.runtime} 
+                 overview={data.data.overview}
+                />
+                <Similar id={id} />
               </ContentSectionContainer>
             </BottomInfo>
           </>
