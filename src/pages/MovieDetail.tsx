@@ -7,12 +7,12 @@ import {Rating} from "@mui/material"
 
 //MovieDetail 페이지는 쿼리스트링에서 id를 받아와서 해당 id에 맞는 영화 정보를 보여주기 때문에 필요
 import {useParams} from 'react-router-dom'
-import useMovieDetail from '../features/movie/useMovieDetail';
 
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import DefaultInfo from '../features/movie/detail/DefaultInfo';
 import Similar from '../features/movie/detail/Similar';
+import useMovieDetail from '../features/movie/useMovieDetail';
 
 
 
