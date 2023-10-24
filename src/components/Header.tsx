@@ -253,10 +253,14 @@ const Header: React.FC = () => {
                             </SearchResultWrapper>
                         </SearchMenu>
                         <Menu>
-                            <SignIn>로그인</SignIn>
+                            <Link href="/signin">
+                                <SignIn>로그인</SignIn>
+                            </Link>
                         </Menu>
                         <Menu>
-                            <SignUp>회원가입</SignUp>
+                            <Link href="/signup">   
+                                <SignUp>회원가입</SignUp>
+                            </Link>
                         </Menu>
                     </MenuList>
                 </MenuListWrapper>

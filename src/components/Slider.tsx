@@ -34,12 +34,14 @@ const ArrowButton = styled.button<{ pos?: 'left' | 'right' }>`
 `;
 
 const DEFAULT_SETTINGS: Settings = {
+  autoplay:true,
+  autoplaySpeed: 2000,
   dots: false,
   arrows: true,
   infinite: true,
   speed: 500,
   slidesToShow: 5,
-  slidesToScroll: 5,
+  slidesToScroll: 1,
   swipe: true,
   draggable: true,
   prevArrow: (
