@@ -6,6 +6,7 @@ import MovieDetail from './pages/MovieDetail';
 import TvDetail from './pages/TvDetail';
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
+import MyPage from './pages/MyPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/tv/:id" element={<TvDetail />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/user" element={<MyPage />} />
       </Routes>
     </Router>
   );

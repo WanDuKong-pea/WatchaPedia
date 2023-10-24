@@ -9,6 +9,8 @@ import PopularMovieSection from '../features/movie/popular';
 import TopRateMovieSection from '../features/movie/topRate';
 import UpcomingMovieSection from '../features/movie/upcoming';
 import styled from "@emotion/styled"
+const Base = styled.div`
+`;
 
 const Main = styled.main`
   max-width: 1200px;
@@ -20,19 +22,19 @@ const Container = styled.div`
 `;
 
 const MainPage: React.FC = () => (
-  <>
+  <Base>
+    <Header />
     <Main>
       <Container>
-        <Header />
         <LatestMovieSection />
         <NowPlayingSection />
         <PopularMovieSection />
         <TopRateMovieSection />
         <UpcomingMovieSection />
-        <Footer />
       </Container>
     </Main>
-  </>
+    <Footer />
+  </Base>
 )
 
 export default MainPage;

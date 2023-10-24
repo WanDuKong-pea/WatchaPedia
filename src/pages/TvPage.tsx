@@ -10,6 +10,9 @@ import TopRateTvSection from '../features/Tv/topRate';
 import OnTheAirTvSection from '../features/Tv/onTheAir';
 import PopularTvSection from '../features/Tv/popular';
 
+const Base = styled.div`
+`;
+
 const Main = styled.main`
   max-width: 1200px;
   margin: 0 auto;
@@ -22,19 +25,19 @@ const Container = styled.div`
 
 const TvPage: React.FC = () => {
   return (
-    <>
-      <Main>
-        <Container>
-          <Header />
+    <Base>
+      <Header />
+        <Main>
+          <Container>
             <LatestTvSection />
             <AiringTodayTvSection />
             <OnTheAirTvSection />
             <PopularTvSection />
             <TopRateTvSection />
-          <Footer />
-        </Container>
-      </Main>
-    </>
+          </Container>
+        </Main>
+      <Footer />
+    </Base>
   );
 }
 
