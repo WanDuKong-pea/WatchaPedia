@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import {AiOutlineSearch} from 'react-icons/ai'
 import useMovieSearch from '../features/movie/useMovieSearch';
+import Modal from "react-modal"
+import SigninForm from "./SigninForm";
 
 //z-index => 레이어의 순서를 정해주는 속성. 높을수록 위에 쌓임
 const Base = styled.header`
@@ -194,9 +196,40 @@ const SearchResultListItem = styled.li`
     }    
 `;
 
+const customModalStyles: ReactModal.Styles = {
+    overlay: {
+      backgroundColor: " rgba(0, 0, 0, 0.6)",
+      width: "100%",
+      height: "100vh",
+      zIndex: "10",
+      position: "fixed",
+      top: "0",
+      left: "0",
+    },
+    content: {
+      width: "375px",
+      height: "631px",
+      padding: "32px 0px 16px 0px",
+      zIndex: "150",
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      borderRadius: "10px",
+      boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.30)",
+      backgroundColor: "white",
+      justifyContent: "center",
+      overflow: "auto",
+    },
+  };
+
 const Header: React.FC = () => {
     //검색 키워드를 저장하는 state
     const [searchKeyword, setSearchKeyword] = useState<string>('');
+    //로그인 모달을 띄우는 state
+    const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
+    //회원가입 모달을 띄우는 state
+    const [isSignUpModalOpen, setIsSignUpModalOpen] = useState<boolean>(false);
     
     //검색키워드를 set하는 함수
     const handleKeyword = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -253,14 +286,23 @@ const Header: React.FC = () => {
                             </SearchResultWrapper>
                         </SearchMenu>
                         <Menu>
-                            <Link href="/signin">
-                                <SignIn>로그인</SignIn>
-                            </Link>
+                            <SignIn onClick={()=> setIsSignInModalOpen(true)}>로그인</SignIn>
+                            <Modal isOpen={isSignInModalOpen} 
+                               onRequestClose={() => setIsSignInModalOpen(false)}
+                               style={customModalStyles}>
+                                <div>로그인 모달</div>
+                                <SigninForm />
+                                <button onClick={()=> setIsSignInModalOpen(false)}>닫기</button>
+                            </Modal>
                         </Menu>
                         <Menu>
-                            <Link href="/signup">   
-                                <SignUp>회원가입</SignUp>
-                            </Link>
+                            <SignUp onClick={()=> setIsSignUpModalOpen(true)}>회원가입</SignUp>
+                            <Modal isOpen={isSignUpModalOpen}
+                              onRequestClose={() => setIsSignUpModalOpen(false)}
+                              style={customModalStyles}>
+                                <div>회원가입 모달</div>
+                                <button onClick={()=> setIsSignUpModalOpen(false)}>닫기</button>
+                            </Modal>
                         </Menu>
                     </MenuList>
                 </MenuListWrapper>
