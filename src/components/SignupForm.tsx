@@ -32,7 +32,7 @@ const Input = styled.input`
     border-radius: 4px;
 `;
 
-const LoginButton = styled.button`
+const SignupButton = styled.button`
     width: 350px;
     height: 50px;
     margin: 15px 0px;
@@ -71,35 +71,26 @@ const Form = styled.form`
     padding: 0px;
 `;
 
-const LoginLogo = styled.h3`
+const SignupLogo = styled.h3`
     margin: 0px 0px 15px 0px;
 `;
 
-const SigninForm: React.FC = () => (
+const SignupForm: React.FC = () => (
     <Base>
     <Form>
-      <LoginLogo>Login</LoginLogo>
+      <SignupLogo>Sign Up</SignupLogo>
+      <Input id="name" type="name" placeholder="Name" />
       <Input id="email" type="email" placeholder="Email" />
       <Input id="password" type="password" placeholder="Password" />
-      <LoginButton type="submit">Login</LoginButton>
+      <SignupButton type="submit">Sign Up</SignupButton>
     </Form>
       <StyledLink to="/">
         <PointText>
-            <span className='primary'>Forgot password?</span>
+            <span>Already have an account?</span>
+            <span className='primary'>Login</span>
         </PointText>
-      </StyledLink>
-      <StyledLink to="/signup">
-        <PointText>
-            <span>Don't have an account?</span>
-            <span className='primary'>Sign up</span>
-        </PointText>
-      </StyledLink>
-      <Line />
-      <PointText>
-            <span>Tip: Do you have Watcha accout? You can use the same account!</span>
-      </PointText>
-     
+      </StyledLink>   
     </Base>
 )
 
-export default SigninForm;
+export default SignupForm;
