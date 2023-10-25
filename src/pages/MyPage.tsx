@@ -5,6 +5,7 @@ import Header from '../components/Header';
 
 import styled from "@emotion/styled"
 import UserInfo from '../components/UserInfo';
+import BackButton from '../components/BackButton';
 const Base = styled.div`
     background-color: rgba(0, 0, 0, 0.1);
 `;

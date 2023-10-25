@@ -7,6 +7,7 @@ import {PiTelevisionSimpleDuotone} from 'react-icons/pi'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  color: black;
 `;
 
 const Base = styled.div`
@@ -86,6 +87,7 @@ const ButtonCard = styled.div`
 `;
 
 const ArchiveButton = styled.button`
+    margin-top: 5px;
     margin-bottom: 0px;
     width: 100%;
     height: 30px;
@@ -99,8 +101,8 @@ const ArchieveIconsBox = styled.div`
     margin-top: 10px;
     padding-top: 15px;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 50px;
     text-align: center;
     background-color: rgba(0, 0, 0, 0.1);
     color: rgba(0, 0, 0, 0.3);
@@ -141,20 +143,20 @@ const UserInfo: React.FC = () => (
                 <Line />
                 <ButtonWrapper>
                     <ButtonCard>
+                        <StyledLink to="/user/watched">
                         <H3>0</H3>
-                        <StyledLink to="/">
                         <PlainText>Watched</PlainText>
                         </StyledLink>
                     </ButtonCard>
                     <ButtonCard>
+                        <StyledLink to="/user/like">
                         <H3>0</H3>
-                        <StyledLink to="/">
                         <PlainText>Like</PlainText>
                         </StyledLink>
                     </ButtonCard>
                     <ButtonCard>
+                        <StyledLink to="/user/comments">
                         <H3>0</H3>
-                        <StyledLink to="/">
                         <PlainText>Comments</PlainText>
                         </StyledLink>
                     </ButtonCard>
@@ -165,18 +167,18 @@ const UserInfo: React.FC = () => (
             <ArcheiveLogo>Archieve</ArcheiveLogo>
             <ButtonWrapper>
                     <ButtonCard>
+                        <StyledLink to="/user/movie">
                             <ArchieveIconsBox>
                                 <BiMovie size="30" />
                             </ArchieveIconsBox>
-                        <StyledLink to="/">
                             <ArchiveButton>Movie</ArchiveButton>
                         </StyledLink>
                     </ButtonCard>
                     <ButtonCard>
-                        <ArchieveIconsBox>
-                            <PiTelevisionSimpleDuotone size="30" />
-                        </ArchieveIconsBox>
-                        <StyledLink to="/">
+                        <StyledLink to="/user/tv">
+                            <ArchieveIconsBox>
+                                <PiTelevisionSimpleDuotone size="30" />
+                            </ArchieveIconsBox>
                             <ArchiveButton>TV</ArchiveButton>
                         </StyledLink>
                     </ButtonCard>
