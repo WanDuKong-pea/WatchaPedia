@@ -13,6 +13,7 @@ import Footer from "../components/Footer"
 import DefaultInfo from '../features/movie/detail/DefaultInfo';
 import Similar from '../features/movie/detail/Similar';
 import useMovieDetail from '../features/movie/useMovieDetail';
+import Comment from '../components/Comment';
 
 
 
@@ -84,7 +85,7 @@ const PosterWrapper = styled.div`
   width: 166px;
   height: 238px;
   border-bottom: solid 2px #fff;
-  top: -48px;
+  top: -70px;
   left: 0;
   border-radius: 3px;
   box-shadow: 0 0 2px rgb(0,0,0/30%);
@@ -296,6 +297,7 @@ const MovieDetail: React.FC = () => {
                  runtime={data.data.runtime} 
                  overview={data.data.overview}
                 />
+                <Comment />
                 <Similar id={id} />
               </ContentSectionContainer>
             </BottomInfo>

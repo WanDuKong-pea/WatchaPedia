@@ -12,7 +12,8 @@ import {useParams} from 'react-router-dom'
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import DefaultInfo from '../features/Tv/detail/DefaultInfo';
-import Similar from '../features/movie/detail/Similar';
+import Comment from '../components/Comment';
+import Similar from '../features/Tv/detail/Similar';
 
 
 
@@ -84,7 +85,7 @@ const PosterWrapper = styled.div`
   width: 166px;
   height: 238px;
   border-bottom: solid 2px #fff;
-  top: -48px;
+  top: -70px;
   left: 0;
   border-radius: 3px;
   box-shadow: 0 0 2px rgb(0,0,0/30%);
@@ -295,6 +296,7 @@ const TvDetail: React.FC = () => {
                  genres={genres} 
                  overview={data.data.overview}
                 />
+                <Comment />
                 <Similar id={id} />
               </ContentSectionContainer>
             </BottomInfo>
