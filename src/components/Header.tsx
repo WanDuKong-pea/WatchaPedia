@@ -43,15 +43,8 @@ const Menu = styled.li`
     align-items: center;
     height: 62px;
     flex-shrink: 0;
-    &:first-child{
-        margin-left: 10px;
-    }
-    &:not(:first-child){
-        margin-left: 24px;
-    }
-    &:last-child{
-        margin-right: 10px;
-    }
+    margin-left: 10px;
+    margin-right: 10px;
 `;
 
 //styled.button<{active?: boolean}> => button 컴포넌트에 active라는 props를 받아옴
@@ -74,7 +67,7 @@ const SearchMenu = styled.li`
     align-items: center;
     height: 62px;
     flex-shrink: 1;
-    margin: 0 0 0 auto;
+    margin: 0 10px 0 10px;
     position: relative;
 `;
 //Link 컴포넌트 CSS 수정(기본 파란색 => 검은색)
@@ -232,7 +225,7 @@ const Header: React.FC = () => {
                         </Menu>
                         <Menu>
                             <Link href="/tv">
-                                <MenuButton>TV 프로그램</MenuButton>
+                                <MenuButton>TV</MenuButton>
                             </Link>
                         </Menu>
                         <SearchMenu>
