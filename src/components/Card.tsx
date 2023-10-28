@@ -80,29 +80,42 @@ const Average = styled.div`
   align-items: center;
 `;
 
-const Card: React.FC<Props> = ({ linkUrl, title, posterPath, voteAverage, year }) => (
-  <StyledLink to={linkUrl}>
-    <Base>
-      <ImageWrapper>
-        <Image src={posterPath} alt={`${title} 의 포스터`} />
-      </ImageWrapper>
-      <Info>
-        <Title>{title}</Title>
-        <Keyword>{year}</Keyword>
-        <Average>
-          <span>
-            평균
-          </span>
-          <span>
-            &nbsp;<AiFillStar />
-          </span>
-          <span>
-            {voteAverage}
-          </span>
-        </Average>
-      </Info>
-    </Base>
-  </StyledLink>
-)
+const Card: React.FC<Props> = ({ linkUrl, title, posterPath, voteAverage, year }) => {
+
+//--------------------  TMDB API 이미지 X => 대체 이미지 지정 ------------------//
+  //아래와 같은 코드는 자바스크림트에서 정확하게 동작하지 않을 가능성이 있음
+  //if(posterPath === null){
+  //일반적으로 자바스크립트에서는 null, undefined, 0, 빈 문자열 등을 false로 간주함.
+  //따라서 삼항 연산자를 사용해서 posterPath가 null이면 defaultImageURL을 사용하도록 함.
+  const defaultImageURL = "https://as1.ftcdn.net/v2/jpg/05/04/28/96/1000_F_504289605_zehJiK0tCuZLP2MdfFBpcJdOVxKLnXg1.jpg";
+  const imgURL = !posterPath.includes('null')? posterPath : defaultImageURL;
+//--------------------  /TMDB API 이미지 X => 대체 이미지 지정 ------------------//
+
+  return(
+    
+    <StyledLink to={linkUrl}>
+      <Base>
+        <ImageWrapper>
+          <Image src={imgURL} alt={`${title} 의 포스터`} />
+        </ImageWrapper>
+        <Info>
+          <Title>{title}</Title>
+          <Keyword>{year}</Keyword>
+          <Average>
+            <span>
+              평균
+            </span>
+            <span>
+              &nbsp;<AiFillStar />
+            </span>
+            <span>
+              {voteAverage}
+            </span>
+          </Average>
+        </Info>
+      </Base>
+    </StyledLink>
+  )
+}
 
 export default Card;

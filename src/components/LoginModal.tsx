@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import Modal from "react-modal"
 import SigninForm from "./SigninForm";
 import styled from "@emotion/styled";
@@ -15,7 +15,7 @@ const customModalStyles: ReactModal.Styles = {
     },
     content: {
       width: "390px",
-      height: "500px",
+      height: "530px",
       padding: "32px 0px 0px 0px",
       zIndex: "150",
       position: "absolute",
@@ -34,6 +34,7 @@ const customModalStyles: ReactModal.Styles = {
 const TextLogo = styled.h1`
     font-size: 24px;
     font-weight: 700;
+    margin: 10px 0px 10px 0px;
     > span[class="primary"]{
         color: rgb(255, 47, 110);
     }
@@ -45,16 +46,25 @@ const TextLogo = styled.h1`
 interface LoginModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
+    isSignUpModalOpen: boolean;
+    setIsSignUpModalOpen: Dispatch<SetStateAction<boolean>>;
+    signUpSuccess: boolean;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({isOpen, onRequestClose}) => {
+const LoginModal: React.FC<LoginModalProps> = ({
+    isOpen, 
+    onRequestClose, 
+    isSignUpModalOpen,
+    setIsSignUpModalOpen,
+    signUpSuccess,
+}) => {
     return(
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles} ariaHideApp={false}>
         <TextLogo>
             <span className="primary">WATCHOUT</span>
             <span>PEDIA</span>
         </TextLogo>
-        <SigninForm />
+        <SigninForm onRequestClose={onRequestClose} isSignUpModalOpen={isSignUpModalOpen} setIsSignUpModalOpen={setIsSignUpModalOpen} signUpSuccess={signUpSuccess}/>
     </Modal>
     );
 }

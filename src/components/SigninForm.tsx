@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
+import { log } from 'console';
 
 
 
@@ -72,34 +76,124 @@ const Form = styled.form`
 `;
 
 const LoginLogo = styled.h3`
-    margin: 0px 0px 15px 0px;
+    margin: 10px 0px 15px 0px;
 `;
 
-const SigninForm: React.FC = () => (
-    <Base>
-    <Form>
-      <LoginLogo>Login</LoginLogo>
-      <Input id="email" type="email" placeholder="Email" />
-      <Input id="password" type="password" placeholder="Password" />
-      <LoginButton type="submit">Login</LoginButton>
-    </Form>
-      <StyledLink to="/">
-        <PointText>
-            <span className='primary'>Forgot password?</span>
-        </PointText>
-      </StyledLink>
-      <StyledLink to="/signup">
-        <PointText>
-            <span>Don't have an account?</span>
-            <span className='primary'>Sign up</span>
-        </PointText>
-      </StyledLink>
-      <Line />
-      <PointText>
-            <span>Tip: Do you have Watcha accout? You can use the same account!</span>
-      </PointText>
-     
-    </Base>
-)
+const PointTextLink = styled.div`
+    display: block;
+    margin: 10px;
+    cursor: pointer;
+`;
 
+const ServerErrorText = styled.div`
+    width: 330px;
+    background-color: rgba(0,0,0,0.08);
+    color: red;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 2px 0px 0px 0px;
+    padding: 5px;
+`;
+
+interface SigninFormProps {
+    onRequestClose: () => void;
+    isSignUpModalOpen: boolean;
+    setIsSignUpModalOpen: Dispatch<SetStateAction<boolean>>;
+    signUpSuccess?: boolean;
+}
+
+const SigninForm: React.FC<SigninFormProps> =({
+    onRequestClose, 
+    isSignUpModalOpen, 
+    setIsSignUpModalOpen,
+    signUpSuccess,
+}) => { 
+    const [loginEmail, setLoginEmail] = useState<string>('');
+    const [password,setPassword] = useState<string>('');
+    const [serverError, setServerError] = useState<string>('');
+
+    const {login} = useAuth();
+
+    const nav = useNavigate();
+
+    const user = { loginEmail, password };
+
+    const openSignupModal = ():void => {
+        setIsSignUpModalOpen(true);
+        onRequestClose();
+    };
+
+    const handleSubmit = async (e:React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post('http://localhost:8080/watcha-pedia/server/api/user/sign-in', user, {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            // 성공적으로 로그인한 경우 처리
+            if (response.status === 200) {
+              console.log(response.data);
+              login(response.data.sessionId);
+              // MainPage로 이동
+              onRequestClose();
+              nav('/');
+
+            } //로그인 실패한 경우 처리
+          } catch (error: any) {
+            if(error.response.status === 401){
+                setServerError(error.response.data.saveError);
+            }else if(error.response.status === 400){
+                setServerError(error.response.data.saveError);
+            }else{
+                console.log(error);
+            }
+          }
+
+    }
+
+    return(
+        <Base>
+            <PointText>
+                <span className='primary'>{signUpSuccess?"가입을 축하합니다.":""}</span>
+            </PointText> 
+        <Form onSubmit={handleSubmit}>
+        <LoginLogo>Login</LoginLogo>
+        <Input 
+            id="email" 
+            type="email" 
+            placeholder="Email"
+            value={loginEmail}
+            onChange={(e) => setLoginEmail(e.target.value)} 
+        />
+        <Input 
+            id="password" 
+            type="password" 
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} 
+        />
+        <LoginButton type="submit">Login</LoginButton>
+        <ServerErrorText>{serverError}</ServerErrorText>
+        </Form>
+        <PointTextLink>
+            <PointText>
+                <span className='primary'>Forgot password?</span>
+            </PointText>
+        </PointTextLink>
+        <PointTextLink onClick={openSignupModal}>
+            <PointText>
+                <span>Don't have an account?</span>
+                <span className='primary'>Sign up</span>
+            </PointText>
+        </PointTextLink>
+        <Line />
+        <PointText>
+                <span>Tip: Do you have Watcha accout? You can use the same account!</span>
+        </PointText>
+        
+        </Base>
+    )
+}
 export default SigninForm;

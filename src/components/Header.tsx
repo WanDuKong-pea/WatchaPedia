@@ -4,6 +4,9 @@ import {AiOutlineSearch} from 'react-icons/ai'
 import useMovieSearch from '../features/movie/useMovieSearch';
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../auth/AuthContext";
+
 
 //z-index => 레이어의 순서를 정해주는 속성. 높을수록 위에 쌓임
 const Base = styled.header`
@@ -154,6 +157,20 @@ const SignUp = styled.button`
     margin: 15px 0;
 `;
 
+const MyPageBtn = styled.button`
+    border-redius: 6px;
+    font-weight: 500;
+    box-sizing: border-box;
+    min-width: 72px;
+    height: 32px;
+    background: transparent;
+    color: rgb(53,53,53);
+    font-size: 14px;
+    border: 0px solid rgba(116,116,123,0.5);
+    cursor: pointer;
+    margin: 15px 0;
+`;
+
 const SearchResultWrapper = styled.div` 
     position: absolute;
     top: 60px;
@@ -190,12 +207,19 @@ const SearchResultListItem = styled.li`
 `;
 
 const Header: React.FC = () => {
-    //검색 키워드를 저장하는 state
-    const [searchKeyword, setSearchKeyword] = useState<string>('');
+    const nav = useNavigate();
+
     //로그인 모달을 띄우는 state
     const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
     //회원가입 모달을 띄우는 state
     const [isSignUpModalOpen, setIsSignUpModalOpen] = useState<boolean>(false);
+    //회원가입 성공 여부를 저장하는 state
+    const [signUpSuccess, setSignUpSuccess] = useState<boolean>(false);
+    
+    const {isLogin, logout} = useAuth();
+
+    //검색 키워드를 저장하는 state
+    const [searchKeyword, setSearchKeyword] = useState<string>('');
 
     //검색키워드를 set하는 함수
     const handleKeyword = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -251,18 +275,44 @@ const Header: React.FC = () => {
                                 </SearchResultList>    
                             </SearchResultWrapper>
                         </SearchMenu>
-                        <Menu>
-                            <SignIn onClick={()=> setIsSignInModalOpen(true)}>로그인</SignIn>
-                        </Menu>
-                        <Menu>
-                            <SignUp onClick={()=> setIsSignUpModalOpen(true)}>회원가입</SignUp>
-                        </Menu>
+                        {isLogin ?
+                            <>
+                            <Menu>
+                                <MyPageBtn onClick={()=> nav("/user") }>마이페이지</MyPageBtn>
+                            </Menu>
+                            <Menu>
+                                <MyPageBtn onClick={logout}>로그아웃</MyPageBtn>
+                            </Menu>
+                            </>
+                        :
+                            <>
+                            <Menu>
+                                <SignIn onClick={()=> setIsSignInModalOpen(true) }>로그인</SignIn>
+                            </Menu>
+                            <Menu>
+                                <SignUp onClick={()=> setIsSignUpModalOpen(true)}>회원가입</SignUp>
+                            </Menu>
+                            </>
+                            
+                        }
                     </MenuList>
                 </MenuListWrapper>
             </Navigation>
-        
-        <LoginModal isOpen={isSignInModalOpen} onRequestClose={() => setIsSignInModalOpen(false)} />
-        <SignupModal isOpen={isSignUpModalOpen} onRequestClose={() => setIsSignUpModalOpen(false)} />
+        <LoginModal 
+            isOpen={isSignInModalOpen} 
+            onRequestClose={() => setIsSignInModalOpen(false)}
+            isSignUpModalOpen={isSignUpModalOpen}
+            setIsSignUpModalOpen={setIsSignUpModalOpen}
+            signUpSuccess={signUpSuccess}
+
+        />
+        <SignupModal
+            isOpen={isSignUpModalOpen} 
+            onRequestClose={() => setIsSignUpModalOpen(false)} 
+            isSignInModalOpen={isSignInModalOpen} 
+            setIsSignInModalOpen={setIsSignInModalOpen} 
+            setSignUpSuccess={setSignUpSuccess}
+        />
         </Base>
     )
 }

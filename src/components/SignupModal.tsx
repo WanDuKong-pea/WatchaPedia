@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import Modal from "react-modal"
 import styled from "@emotion/styled";
 import SignupForm from "./SignupForm";
@@ -45,16 +45,29 @@ const TextLogo = styled.h1`
 interface SignupModalProps {
     isOpen: boolean;
     onRequestClose: () => void;
+    isSignInModalOpen: boolean;
+    setIsSignInModalOpen: Dispatch<SetStateAction<boolean>>;
+    setSignUpSuccess: Dispatch<SetStateAction<boolean>>;
 }
 
-const SignupModal: React.FC<SignupModalProps> = ({isOpen, onRequestClose}) => {
+const SignupModal: React.FC<SignupModalProps> = ({
+        isOpen, 
+        onRequestClose,isSignInModalOpen,
+        setIsSignInModalOpen,
+        setSignUpSuccess,
+    }) => {
     return(
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles} ariaHideApp={false}>
         <TextLogo>
             <span className="primary">WATCHOUT</span>
             <span>PEDIA</span>
         </TextLogo>
-        <SignupForm />
+        <SignupForm 
+            onRequestClose = {onRequestClose}
+            isSignInModalOpen={isSignInModalOpen} 
+            setIsSignInModalOpen={setIsSignInModalOpen}
+            setSignUpSuccess={setSignUpSuccess}
+        />
     </Modal>
     );
 }

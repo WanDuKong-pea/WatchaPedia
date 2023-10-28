@@ -1,16 +1,6 @@
-import React from 'react';
+import React,{Dispatch, SetStateAction, useState} from 'react';
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
-
-
-
-//Link 컴포넌트를 styled-components로 감싸서 스타일을 적용할 수 있음.
-//Card 컴포넌트 전체를 Link 컴포넌트로 감싸서, 해당 컴포넌트를 클릭하면 linkUrl로 이동하도록 함.
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  display: block;
-  margin: 10px;
-`;
+import axios from 'axios';
 
 const Base = styled.div`
     padding: 10px;
@@ -46,6 +36,12 @@ const SignupButton = styled.button`
     font-size: 16px;
 `;
 
+const Line = styled.hr`
+    border: 0.5px solid rgb(0,0,0,0.1);
+    margin: 10px 0px;
+    width: 350px;
+`;
+
 const PointText = styled.span`
     font-weight: 499;
     font-size: 16px;
@@ -55,12 +51,6 @@ const PointText = styled.span`
     > span:not(.primary){
         color:rgb(0,0,0,0.4);
     }
-`;
-
-const Line = styled.hr`
-    border: 0.5px solid rgb(0,0,0,0.1);
-    margin: 10px 0px;
-    width: 350px;
 `;
 
 const Form = styled.form`
@@ -75,22 +65,152 @@ const SignupLogo = styled.h3`
     margin: 0px 0px 15px 0px;
 `;
 
-const SignupForm: React.FC = () => (
-    <Base>
-    <Form>
-      <SignupLogo>Sign Up</SignupLogo>
-      <Input id="name" type="name" placeholder="Name" />
-      <Input id="email" type="email" placeholder="Email" />
-      <Input id="password" type="password" placeholder="Password" />
-      <SignupButton type="submit">Sign Up</SignupButton>
-    </Form>
-      <StyledLink to="/">
-        <PointText>
-            <span>Already have an account?</span>
-            <span className='primary'>Login</span>
-        </PointText>
-      </StyledLink>   
-    </Base>
-)
+const ErrorText = styled.div`
+    width: 330px;
+    text-align: left;
+    color: red;
+    font-size: 12px;
+    margin: 2px 0px 0px 0px;
+`;
 
+
+const ServerErrorText = styled.div`
+    width: 330px;
+    background-color: rgba(0,0,0,0.08);
+    color: red;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 2px 0px 0px 0px;
+    padding: 5px;
+`;
+
+const PointTextLink = styled.div`
+  display: block;
+  margin: 10px;
+  cursor: pointer;
+`;
+
+interface SignupFormProps { 
+    onRequestClose: () => void;
+    isSignInModalOpen: boolean;
+    setIsSignInModalOpen: Dispatch<SetStateAction<boolean>>;
+    setSignUpSuccess: Dispatch<SetStateAction<boolean>>;
+}
+
+const SignupForm: React.FC<SignupFormProps> = ({
+        onRequestClose, 
+        isSignInModalOpen, 
+        setIsSignInModalOpen,
+        setSignUpSuccess
+    }) => {
+    const [name, setName] = useState<string>('');
+    const [loginEmail, setLoginEmail] = useState<string>('');
+    const [password,setPassword] = useState<string>('');
+
+    const [nameError, setNameError] = useState<string>('');
+    const [loginEmailError, setLoginEmailError] = useState<string>('');
+    const [passwordError, setPasswordError] = useState<string>('');
+    const [serverError, setServerError] = useState<string>('');
+
+    const openSigninModal = ():void => {
+        setIsSignInModalOpen(true);
+        onRequestClose();
+    };
+
+    const handleSubmit = async (e:React.FormEvent) => {
+        e.preventDefault();
+        
+       
+        const user = { name, loginEmail, password };
+
+        if (!name) {
+            setNameError('이름을 입력해주세요.');
+            return;
+        }
+          
+        if (!loginEmail) {
+            setLoginEmailError('이메일을 입력해주세요.');
+            return;
+        }
+          
+        const isVaildPassword = (password:string):void=> {
+            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+            if (!password) {
+              setPasswordError('비밀번호를 입력해주세요.');
+            } else if (!passwordRegex.test(password)) {
+              setPasswordError('비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.');
+            } else if (/\s/.test(password)) {
+              setPasswordError('비밀번호는 공백 없이 입력해주세요.');
+            } else {
+              setPasswordError(''); // 에러 메시지 초기화
+            }
+        };
+
+        isVaildPassword(password);
+        setNameError('');
+        setLoginEmailError(''); // 에러 메시지 초기화
+
+        try {
+          const response = await axios.post('http://localhost:8080/watcha-pedia/server/api/user/sign-up', user, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          // 성공적으로 회원가입한 경우 처리
+          if (response.status === 200) {
+            console.log(response.data)
+            setSignUpSuccess(true);
+            // 로그인 모달로 이동
+            
+            openSigninModal();
+          } // 회원가입 실패한 경우 처리
+        } catch (error: any) {
+          if(error.response.status === 401){
+            setServerError(error.response.data.saveError);;
+          }else{
+          console.log(error);
+          }
+        }
+      };
+    return(
+    <Base>
+        <Form onSubmit={handleSubmit}>
+        <SignupLogo>Sign Up</SignupLogo>
+        <Input 
+            id="name" 
+            type="text" 
+            placeholder="Name" 
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+        />
+        <ErrorText>{nameError}</ErrorText>
+        <Input 
+            id="email" 
+            type="email" 
+            placeholder="Email"
+            value={loginEmail}
+            onChange={(e) => setLoginEmail(e.target.value)} 
+        />
+        <ErrorText>{loginEmailError}</ErrorText>
+        <Input 
+            id="password" 
+            type="password" 
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} 
+        />
+        <ErrorText>{passwordError}</ErrorText>
+        <SignupButton type="submit">Sign Up</SignupButton>
+        <ServerErrorText>{serverError}</ServerErrorText>
+        </Form>
+        <Line />
+        <PointTextLink>  
+          <PointText onClick={openSigninModal}>
+              <span>Already have an account?</span>
+              <span className='primary'>Login</span>
+          </PointText>
+        </PointTextLink>
+    </Base>
+    );
+}
 export default SignupForm;
